@@ -1,0 +1,33 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore the database.
+/config/database.yml
+/db/data.yml
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore the asset.
+/public/assets/*
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+
+# Ignore the token.
+config/secrets.yml
+
+# Environment normalisation:
+/.bundle
+/vendor/bundle
+
+# Ignore other unneeded files.
+doc/
+*.swp
+*~
+.project
+.DS_Store
+.idea
+bin/*
+bundle_bin/
