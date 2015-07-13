@@ -51,7 +51,7 @@ end
 # ┣ venue_name：開催会場
 # ┣ lat：開催会場の緯度
 # ┣ long：開催会場の経度
-# ┣ published_at：公開日時
+# ┣ published_at：公開日時（＊ATNDなし）
 # ┣ updated_at：更新日時
 # ┗ group（＊ATNDなし）
 # 	┣ id
