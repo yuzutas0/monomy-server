@@ -7,3 +7,69 @@ class Crawls::Robots::Zusaar
 	end
 
 end
+
+
+
+
+
+# --------------------------------------------------------------------
+# Document
+# --------------------------------------------------------------------
+# http://www.zusaar.com/doc/api.html
+#
+#
+# 
+# --------------------------------------------------------------------
+# http://www.zusaar.com/api/event/
+# --------------------------------------------------------------------
+# {
+# 	"results_start": 1,
+# 	"event":
+# 	[
+# 		{
+# 			"limit": 50,
+# 			"lon": "",
+# 			"owner_nickname": "Kenji Nakagaki",
+# 			"waiting": 0,
+# 			"catch": "カンボジアの子供たちが使う英語学習アプリを、Androidで作ってみよう！",
+# 			"event_id": "9167003",
+# 			"url": "https://sites.google.com/a/gtugs.org/tokai/handson/20150802",
+# 			"owner_profile_url": "http://www.facebook.com/100002346126273",
+# 			"title": "Androidハッカソン「EDUCA x GDG名古屋」",
+# 			"updated_at": "2015-07-13T00:39:50Z",
+# 			"accepted": 0,
+# 			"event_url": "http://www.zusaar.com/event/9167003",
+# 			"pay_type": "0",
+# 			"address": "",
+# 			"description": "<div><font face=\"Arial, Verdana\"><span style=\"font-size: 10pt; line-height: normal;\">EDUCA（ http://class4every1.jp/educa/ ）は、使われなくなったスマートフォンを集めて、そこに英語</span><span style=\"line-height: normal;\">学習アプリ</span><span style=\"font-size: 10pt; line-height: normal;\">をいれてカンボジアの生徒たちに届ける活動をしている、意義ある活動をしている団体です。しかしまだ始まったばかりのプロジェクトなので、いろいろやらなければならないことがあります。その中の一つに、スマートフォンに入れる英語</span><span style=\"line-height: normal;\">学習アプリ</span><span style=\"font-size: 10pt; line-height: normal;\">の改善があります。</span></font></div><div><font face=\"Arial, Verdana\"><span style=\"font-size: 10pt; line-height: normal;\">そこで今回のGDG名古屋では、ハッカソン形式でこの英語</span><span style=\"line-height: normal;\">学習アプリ</span><span style=\"font-size: 10pt; line-height: normal;\">を作ってみたいと思います。ハッカソンの会場には、実際にEDUCAで活動しているメンバーである村田 Andrew 裕亮さん（今は大学一年生で、とてもアクティブな若者です！）にも来ていただいて、EDUCAの活動や用意したい英語</span><span style=\"line-height: normal;\">学習アプリ</span><span style=\"font-size: 10pt; line-height: normal;\">について説明してもらいます。</span></font></div><div style=\"font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; line-height: normal;\"><font face=\"Arial, Verdana\"><span style=\"line-height: normal;\">自分のスキルで世界をちょっと変えてみたいと思っている人たちの参加を、こころよりお待ちしています！</span></font></div>",
+# 			"ended_at": "2015-08-02T18:00:00+09:00",
+# 			"owner_id": "agxzfnp1c2Fhci1ocmRyHAsSBFVzZXIiEjEwMDAwMjM0NjEyNjI3M19mYgw",
+# 			"started_at": "2015-08-02T10:00:00+09:00",
+# 			"place": "未定（エイチームで調整中）",
+# 			"lat": ""
+# 		},
+# 		{
+# 			"limit": 10,
+# 			"lon": 139.7427296,
+# 			"owner_nickname": "okachimachiorz1",
+# 			"waiting": 0,
+# 			"catch": "割と易しい目(推定)の、分散DB本「Principles of Distributed Database Syste",
+# 			"event_id": "8047006",
+# 			"url": "http://www.nautilus-technologies.com/company/access.html",
+# 			"owner_profile_url": "http://twitter.com/okachimachiorz1",
+# 			"title": "分散合意本読書会第37回",
+# 			"updated_at": "2015-07-09T12:54:39Z",
+# 			"accepted": 4,
+# 			"event_url": "http://www.zusaar.com/event/8047006",
+# 			"pay_type": "0",
+# 			"address": "東京都品川区北品川1-19-5 コーストライン品川ビル",
+# 			"description": "<div style=\"font-size: 13.3333330154419px;\"><span style=\"font-size: 10pt;\">Fault-Tolerant Agreement in Synchronous Message-Passing Systemsが同期</span></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\">http://www.amazon.co.jp/Fault-Tolerant-Agreement-Synchronous-Message-Passing-Distributed/dp/1608455254/ref=pd_bxgy_fb_text_y</span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\"><br></span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\">Communication and Agreement Abstractions for Fault-Tolerant Distributed Systemsが非同期になります。</span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\">http://www.amazon.co.jp/Communication-Agreement-Abstractions-Fault-Tolerant-Distributed/dp/160845293X/ref=pd_bxgy_fb_text_y</span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\"><br></span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\">合意「だけ」で、こんだけとかどんだけよ、という話ですが、その筋では有名な方の教科書なのでよろしいんじゃないですかね、と言われているで、よろしくやります。</span></font></div><div style=\"font-size: 10pt;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\"><br></span></font></div><div style=\"font-size: 10pt;\">非同期本ですね。</div><div style=\"font-size: 10pt;\">「<span style=\"font-size: 13.3333330154419px;\">Communication and Agreement Abstractions for Fault-Tolerant Distributed Systems」ですね・・・・</span></div><div style=\"font-size: 10pt;\"><span style=\"font-size: 13.3333330154419px;\">そもそもRound modelでなくて同期処理とか、どんだけ無理ゲーだよ的な未知との遭遇ですが、こんな本一人で読むとかありえないので、みんなで読みましょう。</span></div><div style=\"font-size: 10pt;\"><br></div><div style=\"font-size: 13.3333330154419px;\"><font style=\"line-height: 13.3333320617676px;\" face=\"Arial, Verdana\"><span style=\"line-height: normal;\">場所は品川です。</span></font></div>",
+# 			"ended_at": "2015-07-22T21:00:00+09:00",
+# 			"owner_id": "agxzfnp1c2Fhci1ocmRyFgsSBFVzZXIiDDE3MDQ1NzA3Nl90dww",
+# 			"started_at": "2015-07-22T19:00:00+09:00",
+# 			"place": "ノーチラス・テクノロジーズ",
+# 			"lat": 35.6235592
+# 		}
+# 	],
+# 	"results_returned": 10
+# }
