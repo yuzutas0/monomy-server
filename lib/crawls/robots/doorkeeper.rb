@@ -1,9 +1,44 @@
 # encoding: utf-8
 class Crawls::Robots::Doorkeeper
 
+	require 'open-uri'
+	require 'kconv'
+	require 'json'
+
 	# rails runner Crawls::Robots::Doorkeeper.execute
 	def self.execute
-		puts "test3"
+		puts "Doorkeeper"
+		# loop - get all events
+		response = open("http://api.doorkeeper.jp/events/?sort=updated_at&page=1", &:read).toutf8
+		json = JSON.parser.new(response)
+		hash = json.parse()
+		hash.each do |event_outer|
+			event_inner = event_outer['event']
+			# todo: puts message => active record
+			puts event_inner['id']
+			puts event_inner['title']
+			puts event_inner['description']
+			puts event_inner['public_url']
+			puts event_inner['starts_at']
+			puts event_inner['ends_at']
+			puts event_inner['ticket_limit']
+			puts event_inner['address']
+			puts event_inner['venue_name']
+			puts event_inner['lat']
+			puts event_inner['long']
+			puts event_inner['published_at']
+			puts event_inner['updated_at']
+			puts event_inner['group']['id']
+			puts event_inner['group']['name']
+			puts event_inner['group']['country_code']
+			puts event_inner['group']['logo']
+			puts event_inner['group']['description']
+			puts event_inner['group']['public_url']
+			puts event_inner['banner']
+			puts event_inner['participants']
+			puts event_inner['waitlisted']
+			break # todo: delete
+		end
 	end
 
 end
@@ -22,7 +57,7 @@ end
 # --------------------------------------------------------------------
 # Request Param
 # --------------------------------------------------------------------
-# http://www.zusaar.com/api/event/?
+# http://api.doorkeeper.jp/events/?
 #
 # page
 # => 検索の開始位置（初期値：1）
