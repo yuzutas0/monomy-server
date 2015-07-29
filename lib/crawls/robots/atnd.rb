@@ -1,9 +1,22 @@
 # encoding: utf-8
 class Crawls::Robots::Atnd
 
+	require 'open-uri'
+	require 'kconv'
+	require 'json'
+
 	# rails runner Crawls::Robots::Atnd.execute
 	def self.execute
 		puts "test3"
+		response = open("http://api.atnd.org/events/?format=json&ym=201508&count=10&start=1", &:read).toutf8
+		json = JSON.parser.new(response)
+		hash =  json.parse()
+		parsed = hash['events']
+		parsed.each do |event_outer|
+			event_inner = event_outer['event']
+			puts event_inner
+			break
+		end
 	end
 
 end
