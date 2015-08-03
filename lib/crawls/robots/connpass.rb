@@ -1,9 +1,13 @@
 # encoding: utf-8
 class Crawls::Robots::Connpass
 
+	require 'open-uri'
+	require 'kconv'
+	require 'json'
+
 	# rails runner Crawls::Robots::Connpass.execute
 	def self.execute
-		puts "test3"
+		puts "Connpass"
 	end
 
 end

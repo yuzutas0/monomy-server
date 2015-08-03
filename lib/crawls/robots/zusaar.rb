@@ -1,9 +1,42 @@
 # encoding: utf-8
 class Crawls::Robots::Zusaar
 
+	require 'open-uri'
+	require 'kconv'
+	require 'json'
+
 	# rails runner Crawls::Robots::Zusaar.execute
 	def self.execute
-		puts "test3"
+		puts "Zusaar"
+		# loop - get all events
+		response = open("http://www.zusaar.com/api/event/?ym=201508&count=100&start=1", &:read).toutf8
+		json = JSON.parser.new(response)
+		hash = json.parse()
+		parsed = hash['event']
+		parsed.each do |event|
+			# todo: puts message => active record
+			puts event['event_id']
+			puts event['title']
+			puts event['catch']
+			puts event['description']
+			puts event['event_url']
+			puts event['hash_tag']
+			puts event['started_at']
+			puts event['ended_at']
+			puts event['url']
+			puts event['limit']
+			puts event['address']
+			puts event['place']
+			puts event['lat']
+			puts event['lon']
+			puts event['owner_id']
+			puts event['owner_profile_url']
+			puts event['owner_nickname']
+			puts event['accepted']
+			puts event['waiting']
+			puts event['updated_at']
+			break # todo: delete
+		end
 	end
 
 end
