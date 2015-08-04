@@ -9,7 +9,7 @@ class Crawls::Robots::Connpass
 	def self.execute
 		puts "Connpass"
 		# loop - get all events
-		response = open("http://connpass.com/api/v1/event/?count=2&order=1&start=1", &:read).toutf8
+		response = open("http://connpass.com/api/v1/event/?count=100&order=1&start=1", &:read).toutf8
 		json = JSON.parser.new(response)
 		hash = json.parse()
 		parsed = hash['events']
