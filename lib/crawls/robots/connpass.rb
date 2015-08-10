@@ -8,36 +8,54 @@ class Crawls::Robots::Connpass
 	# rails runner Crawls::Robots::Connpass.execute
 	def self.execute
 		puts "Connpass"
-		# loop - get all events
-		response = open("http://connpass.com/api/v1/event/?count=100&order=1&start=1", &:read).toutf8
-		json = JSON.parser.new(response)
-		hash = json.parse()
-		parsed = hash['events']
-		parsed.each do |event|
-			# todo: puts message => active record
-			puts event['event_id']
-			puts event['title']
-			puts event['catch']
-			puts event['description']
-			puts event['event_url']
-			puts event['hash_tag']
-			puts event['started_at']
-			puts event['ended_at']
-			puts event['limit']
-			puts event['event_type']
-			puts event['series']['id']
-			puts event['series']['title']
-			puts event['series']['url']
-			puts event['address']
-			puts event['place']
-			puts event['lat']
-			puts event['lon']
-			puts event['owner_id']
-			puts event['owner_nickname']
-			puts event['owner_display_name']
-			puts event['accepted']
-			puts event['waiting']
-			puts event['updated_at']
+
+		# loop - start (1, 26, 51, ..., last)
+		start_count = 1
+		get_count = 100
+		loop do
+
+			request_uri = "http://connpass.com/api/v1/event/?order=1&count=" + get_count.to_s + "&start=" + start_count.to_s
+			response = open(request_uri, &:read).toutf8
+			sleep(2)
+
+			json = JSON.parser.new(response)
+			hash = json.parse()
+			parsed = hash['events']
+			break unless parsed.length > 0
+
+			parsed.each do |event|
+				# todo: break + break outside if updated_at <= DB max(updated) where Connpass
+				# todo: puts message => active record
+				puts event['event_id']
+				puts event['title']
+				puts event['catch']
+				puts event['description']
+				puts event['event_url']
+				puts event['hash_tag']
+				puts event['started_at']
+				puts event['ended_at']
+				puts event['limit']
+				puts event['event_type']
+				if event['series'].present?
+					puts event['series']['id']
+					puts event['series']['title']
+					puts event['series']['url']
+				end
+				puts event['address']
+				puts event['place']
+				puts event['lat']
+				puts event['lon']
+				puts event['owner_id']
+				puts event['owner_nickname']
+				puts event['owner_display_name']
+				puts event['accepted']
+				puts event['waiting']
+				puts event['updated_at']
+				break # todo: delete
+			end
+
+			break if parsed.length < get_count
+			start_count += parsed.length
 			break # todo: delete
 		end
 	end

@@ -30,6 +30,7 @@ class Crawls::Robots::Atnd
 
 				parsed.each do |event_outer|
 					event_inner = event_outer['event']
+					# todo: countinue if updated_at <= DB max(updated) where ATND
 					# todo: puts message => active record
 					puts event_inner['event_id']
 					puts event_inner['title']
@@ -54,7 +55,7 @@ class Crawls::Robots::Atnd
 				end
 
 				break if parsed.length < get_count
-				start_count = start_count + parsed.length
+				start_count += parsed.length
 			end
 		end
 	end

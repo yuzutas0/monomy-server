@@ -8,35 +8,53 @@ class Crawls::Robots::Doorkeeper
 	# rails runner Crawls::Robots::Doorkeeper.execute
 	def self.execute
 		puts "Doorkeeper"
-		# loop - get all events
-		response = open("http://api.doorkeeper.jp/events/?sort=updated_at&page=1", &:read).toutf8
-		json = JSON.parser.new(response)
-		hash = json.parse()
-		hash.each do |event_outer|
-			event_inner = event_outer['event']
-			# todo: puts message => active record
-			puts event_inner['id']
-			puts event_inner['title']
-			puts event_inner['description']
-			puts event_inner['public_url']
-			puts event_inner['starts_at']
-			puts event_inner['ends_at']
-			puts event_inner['ticket_limit']
-			puts event_inner['address']
-			puts event_inner['venue_name']
-			puts event_inner['lat']
-			puts event_inner['long']
-			puts event_inner['published_at']
-			puts event_inner['updated_at']
-			puts event_inner['group']['id']
-			puts event_inner['group']['name']
-			puts event_inner['group']['country_code']
-			puts event_inner['group']['logo']
-			puts event_inner['group']['description']
-			puts event_inner['group']['public_url']
-			puts event_inner['banner']
-			puts event_inner['participants']
-			puts event_inner['waitlisted']
+
+		# loop - start (1, 26, 51, ..., last)
+		start_count = 1
+		get_count = 25
+		loop do
+
+			request_uri = "http://api.doorkeeper.jp/events/?sort=updated_at&page=" + start_count.to_s
+			response = open(request_uri, &:read).toutf8
+			sleep(2)
+
+			json = JSON.parser.new(response)
+			parsed = json.parse()
+			break unless parsed.length > 0
+
+			parsed.each do |event_outer|
+				event_inner = event_outer['event']
+				# todo: break + break outside if updated_at <= DB max(updated) where Doorkeeper
+				# todo: puts message => active record
+				puts event_inner['id']
+				puts event_inner['title']
+				puts event_inner['description']
+				puts event_inner['public_url']
+				puts event_inner['starts_at']
+				puts event_inner['ends_at']
+				puts event_inner['ticket_limit']
+				puts event_inner['address']
+				puts event_inner['venue_name']
+				puts event_inner['lat']
+				puts event_inner['long']
+				puts event_inner['published_at']
+				puts event_inner['updated_at']
+				if event_inner['group'].present?
+					puts event_inner['group']['id']
+					puts event_inner['group']['name']
+					puts event_inner['group']['country_code']
+					puts event_inner['group']['logo']
+					puts event_inner['group']['description']
+					puts event_inner['group']['public_url']
+				end
+				puts event_inner['banner']
+				puts event_inner['participants']
+				puts event_inner['waitlisted']
+				break # todo: delete
+			end
+
+			break if parsed.length < get_count
+			start_count += parsed.length
 			break # todo: delete
 		end
 	end

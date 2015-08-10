@@ -8,34 +8,55 @@ class Crawls::Robots::Zusaar
 	# rails runner Crawls::Robots::Zusaar.execute
 	def self.execute
 		puts "Zusaar"
-		# loop - get all events
-		response = open("http://www.zusaar.com/api/event/?ym=201508&count=100&start=1", &:read).toutf8
-		json = JSON.parser.new(response)
-		hash = json.parse()
-		parsed = hash['event']
-		parsed.each do |event|
-			# todo: puts message => active record
-			puts event['event_id']
-			puts event['title']
-			puts event['catch']
-			puts event['description']
-			puts event['event_url']
-			puts event['hash_tag']
-			puts event['started_at']
-			puts event['ended_at']
-			puts event['url']
-			puts event['limit']
-			puts event['address']
-			puts event['place']
-			puts event['lat']
-			puts event['lon']
-			puts event['owner_id']
-			puts event['owner_profile_url']
-			puts event['owner_nickname']
-			puts event['accepted']
-			puts event['waiting']
-			puts event['updated_at']
-			break # todo: delete
+
+		# loop:yymm (e.g. 201508 - 201512)
+		date = Date.today
+		for after_month in 0..4
+
+			# loop - start (1, 101, 201, ..., last)
+			date_string = (date >> after_month).strftime("%Y%m")
+			start_count = 1
+			get_count = 100
+			loop do
+
+				request_uri = "http://www.zusaar.com/api/event/?ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
+				response = open(request_uri, &:read).toutf8
+				sleep(2)
+
+				json = JSON.parser.new(response)
+				hash = json.parse()
+				parsed = hash['event']
+				break unless parsed.length > 0
+
+				parsed.each do |event|
+					# todo: countinue if updated_at <= DB max(updated) where Zusaar
+					# todo: puts message => active record
+					puts event['event_id']
+					puts event['title']
+					puts event['catch']
+					puts event['description']
+					puts event['event_url']
+					puts event['hash_tag']
+					puts event['started_at']
+					puts event['ended_at']
+					puts event['url']
+					puts event['limit']
+					puts event['address']
+					puts event['place']
+					puts event['lat']
+					puts event['lon']
+					puts event['owner_id']
+					puts event['owner_profile_url']
+					puts event['owner_nickname']
+					puts event['accepted']
+					puts event['waiting']
+					puts event['updated_at']
+					break # todo: delete
+				end
+
+				break if parsed.length < get_count
+				start_count += parsed.length
+			end
 		end
 	end
 
