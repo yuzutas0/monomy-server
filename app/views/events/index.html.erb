@@ -1,4 +1,12 @@
+<div>
+	<%= link_to "ATND", events_path(source_id: 1), method: :get, class: "btn" %>
+	<%= link_to "Doorkeeper", events_path(source_id: 2), method: :get, class: "btn" %>
+	<%= link_to "Zusaar", events_path(source_id: 3), method: :get, class: "btn" %>
+	<%= link_to "Connpass", events_path(source_id: 4), method: :get, class: "btn" %>
+</div>
+
 <div><%= paginate(@events, :window => 3) %></div>
+
 <table class="table table-bordered">
 	<tr>
 		<th>id</th>
