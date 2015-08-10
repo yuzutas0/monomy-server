@@ -11,32 +11,58 @@ class Crawls::Robots::Connpass
 	def self.execute
 		puts "Connpass"
 
-		# loop - start (1, 26, 51, ..., last)
-		start_count = 1
-		get_count = 100
-		loop do
+		# loop : yymm (e.g. 201508 - 201512)
+		date = Date.today
+		for after_month in 0..4
 
-			request_uri = "http://connpass.com/api/v1/event/?order=1&count=" + get_count.to_s + "&start=" + start_count.to_s
-			response = open(request_uri, &:read).toutf8
-			sleep(2)
+			# loop : start (1, 101, 201, ..., last)
+			date_string = (date >> after_month).strftime("%Y%m")
+			start_count = 1
+			get_count = 100
+			loop do
 
-			json = JSON.parser.new(response)
-			hash = json.parse()
-			parsed = hash['events']
-			break unless parsed.length > 0
+				# HTTP
+				request_uri = "http://connpass.com/api/v1/event/?ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
+				response = open(request_uri, &:read).toutf8
+				sleep(2)
 
-			parsed.each do |event_inner|
-				event = Crawls::Converter.getEvent(SOURCE_ID, event_inner, nil)
-				# todo: break + break outside if updated_at <= DB max(updated) where Connpass
-				# todo: find where sourceID+eventID
-				# todo: countinue if event.source_updated_at <= DB source_updated_at 
-				# update or bulk insert
-				break # todo: delete
+				# JSON Parse
+				json = JSON.parser.new(response)
+				hash = json.parse()
+				parsed = hash['events']
+				break unless parsed.length > 0
+
+				# ready for bulk insert
+				insert_list = []
+
+				# loop : event
+				parsed.each do |event_inner|
+					new_event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+
+					# find same event
+					next if new_event.source_id.blank? || new_event.source_event_id.blank?
+					find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+					old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+					old_event = old_events[0] if old_events.present?
+					
+					next if new_event.source_updated_at.blank?
+					if old_event.present?
+						# update
+						next if new_event.source_updated_at <= old_event.source_updated_at
+						Crawls::Converter.updateEvent(old_event, new_event)
+					else
+						# add insert list
+						insert_list << new_event
+					end
+				end
+
+				# bulk insert
+				Event.import(insert_list)
+
+				# ready for next-loop
+				break if parsed.length < get_count
+				start_count += parsed.length
 			end
-
-			break if parsed.length < get_count
-			start_count += parsed.length
-			break # todo: delete
 		end
 	end
 
