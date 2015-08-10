@@ -49,9 +49,9 @@
 		<td><%= link_to "#{@event.id}", event_path(@event) %></td>
 		<td><%= @event.source_id %></td>
 		<td><%= @event.source_event_id %></td>
-		<td><%= @event.title[0..50] %></td>
+		<td><% if @event.title.present? %><%= @event.title[0..50] %><% end %></td>
 		<td><%= @event.catchtext %></td>
-		<td><%= @event.description[0..50] %></td>
+		<td><% if @event.description.present? %><%= @event.description[0..50] %><% end %></td>
 		<td><%= @event.detail_url %></td>
 		<td><%= @event.hash_tag %></td>
 		<td><%= @event.started_at %></td>
@@ -78,7 +78,7 @@
 		<td><%= @event.series_title %></td>
 		<td><%= @event.series_country_code %></td>
 		<td><%= @event.series_logo %></td>
-		<td><%= @event.series_description[0..50] %></td>
+		<td><% if @event.series_description.present? %><%= @event.series_description[0..50] %><% end %></td>
 		<td><%= @event.series_url %></td>
 	</tr>
 	<% end %>

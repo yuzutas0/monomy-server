@@ -11,7 +11,7 @@ class Crawls::Robots::Doorkeeper
 	def self.execute
 		puts "Doorkeeper"
 
-		# loop - start (1, 2, 3, ..., last)
+		# loop : start (1, 2, 3, ..., last)
 		page = 1
 		get_count = 25
 		date = Date.today
