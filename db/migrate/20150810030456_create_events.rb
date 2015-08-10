@@ -34,6 +34,7 @@ class CreateEvents < ActiveRecord::Migration
       t.text :series_logo
       t.text :series_description
       t.text :series_url
+      t.integer :delete_flag
 
       t.timestamps null: false
     end
