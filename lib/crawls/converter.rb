@@ -3,7 +3,7 @@ class Crawls::Converter
 
 	# rails runner Crawls::Converter.updateEvent(old_event, new_event)
 	def self.updateEvent(old_event, new_event)
-		old_event.update_attributes = { :source_id => new_event.source_id,
+		old_event.update_attributes!({ :source_id => new_event.source_id,
 																		:source_event_id => new_event.source_event_id,
 																		:title => new_event.title,
 																		:catchtext => new_event.catchtext,
@@ -35,7 +35,7 @@ class Crawls::Converter
 																		:series_country_code => new_event.series_country_code,
 																		:series_logo => new_event.series_logo,
 																		:series_description => new_event.series_description,
-																		:series_url => new_event.series_url }
+																		:series_url => new_event.series_url })
 	end
 
 	# rails runner Crawls::Converter.getEvent(source_id, source_array)

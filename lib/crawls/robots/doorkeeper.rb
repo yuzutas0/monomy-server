@@ -11,37 +11,54 @@ class Crawls::Robots::Doorkeeper
 	def self.execute
 		puts "Doorkeeper"
 
-		# loop - start (1, 26, 51, ..., last)
-		start_count = 1
+		# loop - start (1, 2, 3, ..., last)
+		page = 1
 		get_count = 25
+		date = Date.today
+		until_date = Date.today << 4
 		loop do
 
-			request_uri = "http://api.doorkeeper.jp/events/?sort=updated_at&page=" + start_count.to_s
+			# HTTP
+			request_uri = "http://api.doorkeeper.jp/events/?since=" + date.to_s + "&until" + until_date.to_s + "&page=" + page.to_s
 			response = open(request_uri, &:read).toutf8
 			sleep(2)
 
+			# JSON Parse
 			json = JSON.parser.new(response)
 			parsed = json.parse()
 			break unless parsed.length > 0
 
+			# ready for bulk insert
+			insert_list = []
+
+			# loop : event
 			parsed.each do |event_outer|
 				event_inner = event_outer['event']
-				event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+				new_event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
 
-				# todo: break + break outside if updated_at <= DB max(updated) where Doorkeeper
-				next if event.source_updated_at.blank?
-				last_updated_at =	Event.where("source_id = ?", SOURCE_ID).maximum(:source_updated_at).pluck(:source_updated_at)
-				next if last_updated_at.present? && event.source_updated_at <= last_updated_at
+				# find same event
+				next if new_event.source_id.blank? || new_event.source_event_id.blank?
+				find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+				old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+				old_event = old_events[0] if old_events.present?
 
-				# todo: find where sourceID+eventID
-				# todo: countinue if event.source_updated_at <= DB source_updated_at 
-				# update or bulk insert
-				break # todo: delete
+				next if new_event.source_updated_at.blank?
+				if old_event.present?
+					# update
+					next if new_event.source_updated_at <= old_event.source_updated_at
+					Crawls::Converter.updateEvent(old_event, new_event)
+				else
+					# add insert list
+					insert_list << new_event
+				end
 			end
 
+			# bulk insert
+			Event.import(insert_list)
+
+			# ready for next-loop
 			break if parsed.length < get_count
-			start_count += parsed.length
-			break # todo: delete
+			page += 1
 		end
 	end
 
@@ -68,7 +85,7 @@ end
 # => 実際に投げるクエリは1,26,51...
 # 
 # sort
-# => 実際に投げるクエリはupdated_at
+# => 実際に投げるクエリはstarts_at
 #
 #
 #

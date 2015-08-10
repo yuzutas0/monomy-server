@@ -78,7 +78,7 @@
 		<td><%= @event.series_title %></td>
 		<td><%= @event.series_country_code %></td>
 		<td><%= @event.series_logo %></td>
-		<td><%= @event.series_description %></td>
+		<td><%= @event.series_description[0..50] %></td>
 		<td><%= @event.series_url %></td>
 	</tr>
 	<% end %>

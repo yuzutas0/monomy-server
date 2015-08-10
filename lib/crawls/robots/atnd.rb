@@ -32,10 +32,10 @@ class Crawls::Robots::Atnd
 				parsed = hash['events']
 				break unless parsed.length > 0
 
-				# ready for bulk insert / update
+				# ready for bulk insert
 				insert_list = []
 
-				# loop : event 
+				# loop : event
 				parsed.each do |event_outer|
 					event_inner = event_outer['event']
 					new_event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
@@ -43,8 +43,9 @@ class Crawls::Robots::Atnd
 					# find same event
 					next if new_event.source_id.blank? || new_event.source_event_id.blank?
 					find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
-					old_event = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
-					
+					old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+					old_event = old_events[0] if old_events.present?
+
 					if old_event.present?
 						# update
 						next if new_event.source_updated_at <= old_event.source_updated_at
