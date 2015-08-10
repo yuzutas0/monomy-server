@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20150810030456) do
     t.integer  "source_id",           null: false
     t.string   "source_event_id",     null: false
     t.string   "title",               null: false
-    t.text     "catch"
+    t.text     "catchtext"
     t.text     "description"
     t.text     "detail_url",          null: false
     t.string   "hash_tag"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20150810030456) do
     t.integer  "waiting"
     t.text     "banner"
     t.datetime "source_published_at"
-    t.datetime "source_updated_at"
+    t.datetime "source_updated_at",   null: false
     t.string   "series_id"
     t.string   "series_title"
     t.string   "series_country_code"

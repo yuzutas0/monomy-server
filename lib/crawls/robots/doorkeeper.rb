@@ -5,6 +5,8 @@ class Crawls::Robots::Doorkeeper
 	require 'kconv'
 	require 'json'
 
+	SOURCE_ID = 2
+
 	# rails runner Crawls::Robots::Doorkeeper.execute
 	def self.execute
 		puts "Doorkeeper"
@@ -24,32 +26,16 @@ class Crawls::Robots::Doorkeeper
 
 			parsed.each do |event_outer|
 				event_inner = event_outer['event']
+				event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+
 				# todo: break + break outside if updated_at <= DB max(updated) where Doorkeeper
-				# todo: puts message => active record
-				puts event_inner['id']
-				puts event_inner['title']
-				puts event_inner['description']
-				puts event_inner['public_url']
-				puts event_inner['starts_at']
-				puts event_inner['ends_at']
-				puts event_inner['ticket_limit']
-				puts event_inner['address']
-				puts event_inner['venue_name']
-				puts event_inner['lat']
-				puts event_inner['long']
-				puts event_inner['published_at']
-				puts event_inner['updated_at']
-				if event_inner['group'].present?
-					puts event_inner['group']['id']
-					puts event_inner['group']['name']
-					puts event_inner['group']['country_code']
-					puts event_inner['group']['logo']
-					puts event_inner['group']['description']
-					puts event_inner['group']['public_url']
-				end
-				puts event_inner['banner']
-				puts event_inner['participants']
-				puts event_inner['waitlisted']
+				next if event.source_updated_at.blank?
+				last_updated_at =	Event.where("source_id = ?", SOURCE_ID).maximum(:source_updated_at).pluck(:source_updated_at)
+				next if last_updated_at.present? && event.source_updated_at <= last_updated_at
+
+				# todo: find where sourceID+eventID
+				# todo: countinue if event.source_updated_at <= DB source_updated_at 
+				# update or bulk insert
 				break # todo: delete
 			end
 

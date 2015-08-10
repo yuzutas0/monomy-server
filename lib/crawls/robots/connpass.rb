@@ -5,6 +5,8 @@ class Crawls::Robots::Connpass
 	require 'kconv'
 	require 'json'
 
+	SOURCE_ID = 4
+
 	# rails runner Crawls::Robots::Connpass.execute
 	def self.execute
 		puts "Connpass"
@@ -23,34 +25,12 @@ class Crawls::Robots::Connpass
 			parsed = hash['events']
 			break unless parsed.length > 0
 
-			parsed.each do |event|
+			parsed.each do |event_inner|
+				event = Crawls::Converter.getEvent(SOURCE_ID, event_inner, nil)
 				# todo: break + break outside if updated_at <= DB max(updated) where Connpass
-				# todo: puts message => active record
-				puts event['event_id']
-				puts event['title']
-				puts event['catch']
-				puts event['description']
-				puts event['event_url']
-				puts event['hash_tag']
-				puts event['started_at']
-				puts event['ended_at']
-				puts event['limit']
-				puts event['event_type']
-				if event['series'].present?
-					puts event['series']['id']
-					puts event['series']['title']
-					puts event['series']['url']
-				end
-				puts event['address']
-				puts event['place']
-				puts event['lat']
-				puts event['lon']
-				puts event['owner_id']
-				puts event['owner_nickname']
-				puts event['owner_display_name']
-				puts event['accepted']
-				puts event['waiting']
-				puts event['updated_at']
+				# todo: find where sourceID+eventID
+				# todo: countinue if event.source_updated_at <= DB source_updated_at 
+				# update or bulk insert
 				break # todo: delete
 			end
 

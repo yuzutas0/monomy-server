@@ -5,6 +5,8 @@ class Crawls::Robots::Zusaar
 	require 'kconv'
 	require 'json'
 
+	SOURCE_ID = 3
+
 	# rails runner Crawls::Robots::Zusaar.execute
 	def self.execute
 		puts "Zusaar"
@@ -28,29 +30,11 @@ class Crawls::Robots::Zusaar
 				parsed = hash['event']
 				break unless parsed.length > 0
 
-				parsed.each do |event|
-					# todo: countinue if updated_at <= DB max(updated) where Zusaar
-					# todo: puts message => active record
-					puts event['event_id']
-					puts event['title']
-					puts event['catch']
-					puts event['description']
-					puts event['event_url']
-					puts event['hash_tag']
-					puts event['started_at']
-					puts event['ended_at']
-					puts event['url']
-					puts event['limit']
-					puts event['address']
-					puts event['place']
-					puts event['lat']
-					puts event['lon']
-					puts event['owner_id']
-					puts event['owner_profile_url']
-					puts event['owner_nickname']
-					puts event['accepted']
-					puts event['waiting']
-					puts event['updated_at']
+				parsed.each do |event_inner|
+					event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+					# todo: find where sourceID+eventID
+					# todo: countinue if event.source_updated_at <= DB source_updated_at 
+					# update or bulk insert
 					break # todo: delete
 				end
 

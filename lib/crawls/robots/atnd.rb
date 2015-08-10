@@ -5,55 +5,60 @@ class Crawls::Robots::Atnd
 	require 'kconv'
 	require 'json'
 
+	SOURCE_ID = 1
+
 	# rails runner Crawls::Robots::Atnd.execute
 	def self.execute
 		puts "ATND"
 
-		# loop:yymm (e.g. 201508 - 201512)
+		# loop : yymm (e.g. 201508 - 201512)
 		date = Date.today
 		for after_month in 0..4
 
-			# loop - start (1, 101, 201, ..., last)
+			# loop : start (1, 101, 201, ..., last)
 			date_string = (date >> after_month).strftime("%Y%m")
 			start_count = 1
 			get_count = 100
 			loop do
 
+				# HTTP
 				request_uri = "http://api.atnd.org/events/?format=json&ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
 				response = open(request_uri, &:read).toutf8
 				sleep(2)
 
+				# JSON Parse
 				json = JSON.parser.new(response)
 				hash =  json.parse()
 				parsed = hash['events']
 				break unless parsed.length > 0
 
+				# ready for bulk insert / update
+				insert_list = []
+
+				# loop : event 
 				parsed.each do |event_outer|
 					event_inner = event_outer['event']
-					# todo: countinue if updated_at <= DB max(updated) where ATND
-					# todo: puts message => active record
-					puts event_inner['event_id']
-					puts event_inner['title']
-					puts event_inner['catch']
-					puts event_inner['description']
-					puts event_inner['event_url']
-					puts event_inner['started_at']
-					puts event_inner['ended_at']
-					puts event_inner['url']
-					puts event_inner['limit']
-					puts event_inner['address']
-					puts event_inner['place']
-					puts event_inner['lat']
-					puts event_inner['lon']
-					puts event_inner['owner_id']
-					puts event_inner['owner_nickname']
-					puts event_inner['owner_twitter_id']
-					puts event_inner['accepted']
-					puts event_inner['waiting']
-					puts event_inner['updated_at']
-					break # todo: delete
+					new_event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+
+					# find same event
+					next if new_event.source_id.blank? || new_event.source_event_id.blank?
+					find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+					old_event = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+					
+					if old_event.present?
+						# update
+						next if new_event.source_updated_at <= old_event.source_updated_at
+						Crawls::Converter.updateEvent(old_event, new_event)
+					else
+						# add insert list
+						insert_list << new_event
+					end
 				end
 
+				# bulk insert
+				Event.import(insert_list)
+
+				# ready for next-loop
 				break if parsed.length < get_count
 				start_count += parsed.length
 			end
