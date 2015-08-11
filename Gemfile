@@ -29,6 +29,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'activerecord-import', '0.10.0'
 gem 'kaminari', '0.16.3'
 gem 'bootstrap-sass', '3.3.5.1'
+gem 'whenever', '0.9.4', :require => false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
