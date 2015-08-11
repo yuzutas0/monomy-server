@@ -44,7 +44,7 @@ class Crawls::Robots::Connpass
 					find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
 					old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
 					old_event = old_events[0] if old_events.present?
-					
+
 					next if new_event.source_updated_at.blank?
 					if old_event.present?
 						# update

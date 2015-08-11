@@ -51,4 +51,6 @@ ActiveRecord::Schema.define(version: 20150810030456) do
     t.datetime "updated_at",          null: false
   end
 
+  add_index "events", ["source_id", "source_event_id"], name: "index_events_on_source_id_and_source_event_id", unique: true
+
 end

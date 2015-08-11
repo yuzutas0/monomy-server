@@ -34,9 +34,10 @@ class CreateEvents < ActiveRecord::Migration
       t.text :series_logo
       t.text :series_description
       t.text :series_url
-      t.integer :delete_flag
 
       t.timestamps null: false
+
+      t.index [:source_id, :source_event_id], :unique => true
     end
   end
 end
