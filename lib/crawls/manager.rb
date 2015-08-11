@@ -3,9 +3,10 @@ class Crawls::Manager
 
 	# rails runner Crawls::Manager.execute
 	def self.execute
-		puts "test" # => "test"
-		Crawls::Converter.execute # => "test2"
-		Crawls::Robots::Atnd.execute # => "test3"
+		Crawls::Robots::Atnd.execute
+		Crawls::Robots::Doorkeeper.execute
+		Crawls::Robots::Zusaar.execute
+		Crawls::Robots::Connpass.execute
 	end
 
 end

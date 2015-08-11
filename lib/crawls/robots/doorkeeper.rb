@@ -14,8 +14,9 @@ class Crawls::Robots::Doorkeeper
 		# loop : start (1, 2, 3, ..., last)
 		page = 1
 		get_count = 25
+		same_loop = 0
 		date = Date.today
-		until_date = Date.today << 4
+		until_date = Date.today >> 4
 		loop do
 
 			# HTTP
@@ -25,7 +26,17 @@ class Crawls::Robots::Doorkeeper
 
 			# JSON Parse
 			json = JSON.parser.new(response)
-			parsed = json.parse()
+			begin
+				parsed = json.parse()				
+			rescue Exception => e
+				same_loop += 1
+				next if same_loop < 5
+				page += 1
+				same_loop = 0
+				next
+			end
+			same_loop = 0
+
 			break unless parsed.length > 0
 
 			# ready for bulk insert
