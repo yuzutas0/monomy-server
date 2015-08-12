@@ -9,4 +9,12 @@ class Crawls::Manager
 		Crawls::Robots::Connpass.execute
 	end
 
+	# rails runner Crawls::Manager.test
+	def self.test
+		Event.create_index
+		for event in Event.show_index('Ruby', 2)
+			puts event.title
+		end
+	end
+
 end
