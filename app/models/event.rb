@@ -9,7 +9,7 @@ class Event < ActiveRecord::Base
 	end
 
 	def self.show_index(query, page)
-		response = self.search(query).page(page).results.to_a
+		response = self.search(query).page(page).results
 	end
 
 end

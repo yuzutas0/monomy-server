@@ -1,11 +1,27 @@
+<nav class="navbar">
+	<%= form_tag('/events', method: "get", enforce_utf8: false, class: "navbar-form navbar-right") do %>
+		<div class="form-group">
+			<%= text_field :freeword, :content, placeholder: "search", class: "form-control" %>
+			<%= submit_tag "検索", name: nil, class: "btn" %>
+		</div>
+	<% end %>
+
+	<div class="navbar-left">
+		<%= link_to "ATND", events_path(source_id: 1), method: :get, class: "btn" %>
+		<%= link_to "Doorkeeper", events_path(source_id: 2), method: :get, class: "btn" %>
+		<%= link_to "Zusaar", events_path(source_id: 3), method: :get, class: "btn" %>
+		<%= link_to "Connpass", events_path(source_id: 4), method: :get, class: "btn" %>
+		<div><%= paginate(@events, :window => 3) %></div>
+	</div>
+</nav>
+
 <div>
-	<%= link_to "ATND", events_path(source_id: 1), method: :get, class: "btn" %>
-	<%= link_to "Doorkeeper", events_path(source_id: 2), method: :get, class: "btn" %>
-	<%= link_to "Zusaar", events_path(source_id: 3), method: :get, class: "btn" %>
-	<%= link_to "Connpass", events_path(source_id: 4), method: :get, class: "btn" %>
+	<% flash.each do |key, value| %>
+	  <%= content_tag(:div, value, class: "alert alert-danger") %>
+	<% end %>
 </div>
 
-<div><%= paginate(@events, :window => 3) %></div>
+<div>Total : <%= @events.total_count %></div>
 
 <table class="table table-bordered">
 	<tr>
@@ -83,4 +99,5 @@
 	</tr>
 	<% end %>
 </table>
+
 <div><%= paginate(@events, :window => 3) %></div>
