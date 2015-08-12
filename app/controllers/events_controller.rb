@@ -19,6 +19,11 @@ class EventsController < ApplicationController
 
 	def show
 		@event = Event.find(params[:id])
+		begin
+			@recommends = @event.more_like_this
+		rescue => e
+			puts e
+		end
 	end
 
 end

@@ -33,3 +33,14 @@
 	<p>series_description:<%= @event.series_description %></p>
 	<p>series_url:<%= @event.series_url %></p>
 </div>
+
+<hr>
+
+<% if @recommends.present? %>
+	<div>
+		<p>似ているイベント</p>
+		<% for recommend in @recommends %>
+			<p><%= link_to "#{recommend.title}", events_path(id: recommend.id), method: :get %></p>
+		<% end %>
+	</div>
+<% end %>

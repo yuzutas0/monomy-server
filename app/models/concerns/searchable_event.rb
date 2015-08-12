@@ -87,6 +87,27 @@ module SearchableEvent
 		end
 	end
 
+	def more_like_this(mlt_fields: 'title,catchtext,description', min_doc_freq: 0, min_term_freq: 0, min_word_len: 0, search_size: 10, body: {})
+    target_id = self.id
+    es = __elasticsearch__
+    searcher = Class.new do
+      define_method(:execute!) do
+        es.client.mlt(
+          search_size: search_size,
+          index: es.index_name,
+          type: es.document_type,
+          body: body,
+          id: target_id,
+          mlt_fields: mlt_fields,
+          min_doc_freq: min_doc_freq,
+          min_term_freq: min_term_freq,
+          min_word_len: min_word_len
+        )
+      end
+    end.new
+    Elasticsearch::Model::Response::Response.new(self.class, searcher)
+  end
+
 	module ClassMethods
 		def create_index!(options={})
 			client = __elasticsearch__.client
