@@ -40,7 +40,11 @@
 	<div>
 		<p>似ているイベント</p>
 		<% for recommend in @recommends %>
-			<p><%= link_to "#{recommend.title}", events_path(id: recommend.id), method: :get %></p>
+			<p>
+				<%= link_to "#{recommend.title}", event_path(recommend.id), method: :get %>
+				（<%= recommend.started_at[0..9] %>）
+				＠<%= recommend.place %>
+			</p>
 		<% end %>
 	</div>
 <% end %>

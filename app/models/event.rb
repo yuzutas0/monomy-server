@@ -13,6 +13,6 @@ class Event < ActiveRecord::Base
 	end
 
 	def more_like_this!
-		self.more_like_this(search_size: 3).results
+		self.more_like_this().results
 	end
 end

@@ -87,7 +87,7 @@ module SearchableEvent
 		end
 	end
 
-	def more_like_this(mlt_fields: 'title,catchtext,description', min_doc_freq: 0, min_term_freq: 0, min_word_len: 0, search_size: 10, body: {})
+	def more_like_this(mlt_fields: 'title,catchtext,description,series_title,series_description', min_doc_freq: 0, min_term_freq: 0, min_word_len: 0, search_size: 10, body: {})
     target_id = self.id
     es = __elasticsearch__
     searcher = Class.new do
