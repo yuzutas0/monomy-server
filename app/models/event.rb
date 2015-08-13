@@ -9,10 +9,10 @@ class Event < ActiveRecord::Base
 	end
 
 	def self.show_index(query, page)
-		response = self.search(query).page(page).results
+		response = self.search(query).page(page).records
 	end
 
 	def more_like_this!
-		self.more_like_this().results
+		self.more_like_this().records
 	end
 end
