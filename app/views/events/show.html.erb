@@ -38,7 +38,10 @@
 
 <% if @recommends.present? %>
 	<div>
-		<p>似ているイベント</p>
+		<p>
+			<%= @event.title %><br />
+			......に似ているイベント
+		</p>
 		<% for recommend in @recommends %>
 			<p>
 				<%= link_to "#{recommend.title}", event_path(recommend.id), method: :get %>
