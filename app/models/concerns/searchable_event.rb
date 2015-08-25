@@ -92,17 +92,21 @@ module SearchableEvent
     es = __elasticsearch__
     searcher = Class.new do
       define_method(:execute!) do
-        es.client.mlt(
-          search_size: search_size,
-          index: es.index_name,
-          type: es.document_type,
-          body: body,
-          id: target_id,
-          mlt_fields: mlt_fields,
-          min_doc_freq: min_doc_freq,
-          min_term_freq: min_term_freq,
-          min_word_len: min_word_len
-        )
+      	begin
+	        es.client.mlt(
+	          search_size: search_size,
+	          index: es.index_name,
+	          type: es.document_type,
+	          body: body,
+	          id: target_id,
+	          mlt_fields: mlt_fields,
+	          min_doc_freq: min_doc_freq,
+	          min_term_freq: min_term_freq,
+	          min_word_len: min_word_len
+	        )
+	      rescue
+	      	return nil
+	      end
       end
     end.new
     Elasticsearch::Model::Response::Response.new(self.class, searcher)

@@ -1,4 +1,4 @@
-# bundle install --path vendor/bundle
+# bundle install --path vendor/bundle --without=production
 
 
 
@@ -40,5 +40,10 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :production do
+	gem 'rails_12factor', '0.0.3'
+	gem 'puma', '2.13.4'
 end
 

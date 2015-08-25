@@ -31,3 +31,10 @@ doc/
 .idea
 bin/*
 bundle_bin/
+
+# Ignore Bluemix
+bluemix.md
+.cfignore
+manifest.yml
+config/puma.rb
+Procfile

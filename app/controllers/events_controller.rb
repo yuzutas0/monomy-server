@@ -19,10 +19,11 @@ class EventsController < ApplicationController
 
 	def show
 		@event = Event.find(params[:id])
+		recommends = @event.more_like_this
 		begin
-			@recommends = @event.more_like_this
-		rescue => e
-			puts e
+			@recommends = recommends if recommends.present?			
+		rescue Exception => e
+			logger.debug "not find recommends"
 		end
 	end
 
