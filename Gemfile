@@ -32,6 +32,7 @@ gem 'bootstrap-sass', '3.3.5.1'
 gem 'whenever', '0.9.4', :require => false
 gem 'elasticsearch-rails', '0.1.7'
 gem 'elasticsearch-model', '0.1.7'
+gem 'yaml_db', '0.3.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -45,5 +46,6 @@ end
 group :production do
 	gem 'rails_12factor', '0.0.3'
 	gem 'puma', '2.13.4'
+	gem 'mysql2', '0.3.20'
 end
 
