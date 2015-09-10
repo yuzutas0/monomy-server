@@ -2,7 +2,7 @@
 	<%= form_tag('/events', method: "get", enforce_utf8: false, class: "navbar-form navbar-right") do %>
 		<div class="form-group">
 			<%= text_field :freeword, :content, placeholder: "search", class: "form-control" %>
-			<%= submit_tag "検索", name: nil, class: "btn" %>
+			<%= submit_tag "検索", name: nil, class: "btn btn-primary" %>
 		</div>
 	<% end %>
 
@@ -23,81 +23,43 @@
 
 <div>Total : <%= @events.total_count %></div>
 
-<table class="table table-bordered">
-	<tr>
-		<th>id</th>
-		<th>source_id</th>
-		<th>source_event_id</th>
-		<th>title</th>
-		<th>catchtext</th>
-		<th>description</th>
-		<th>detail_url</th>
-		<th>hash_tag</th>
-		<th>started_at</th>
-		<th>ended_at</th>
-		<th>pay_type</th>
-		<th>event_type</th>
-		<th>reference_url</th>
-		<th>limit</th>
-		<th>adress</th>
-		<th>place</th>
-		<th>lat</th>
-		<th>lon</th>
-		<th>owner_id</th>
-		<th>owner_profile_url</th>
-		<th>owner_nickname</th>
-		<th>owner_twitter_id</th>
-		<th>owner_display_name</th>
-		<th>accepted</th>
-		<th>waiting</th>
-		<th>banner</th>
-		<th>source_published_at</th>
-		<th>source_updated_at</th>
-		<th>series_id</th>
-		<th>series_title</th>
-		<th>series_country_code</th>
-		<th>series_logo</th>
-		<th>series_description</th>
-		<th>series_url</th>
-	</tr>
-	<% for @event in @events %>
-	<tr>
-		<td><%= link_to "#{@event.id}", event_path(@event) %></td>
-		<td><%= @event.source_id %></td>
-		<td><%= @event.source_event_id %></td>
-		<td><% if @event.title.present? %><%= @event.title[0..50] %><% end %></td>
-		<td><%= @event.catchtext %></td>
-		<td><% if @event.description.present? %><%= @event.description[0..50] %><% end %></td>
-		<td><%= @event.detail_url %></td>
-		<td><%= @event.hash_tag %></td>
-		<td><%= @event.started_at %></td>
-		<td><%= @event.ended_at %></td>
-		<td><%= @event.pay_type %></td>
-		<td><%= @event.event_type %></td>
-		<td><%= @event.reference_url %></td>
-		<td><%= @event.limit %></td>
-		<td><%= @event.adress %></td>
-		<td><%= @event.place %></td>
-		<td><%= @event.lat %></td>
-		<td><%= @event.lon %></td>
-		<td><%= @event.owner_id %></td>
-		<td><%= @event.owner_profile_url %></td>
-		<td><%= @event.owner_nickname %></td>
-		<td><%= @event.owner_twitter_id %></td>
-		<td><%= @event.owner_display_name %></td>
-		<td><%= @event.accepted %></td>
-		<td><%= @event.waiting %></td>
-		<td><%= @event.banner %></td>
-		<td><%= @event.source_published_at %></td>
-		<td><%= @event.source_updated_at %></td>
-		<td><%= @event.series_id %></td>
-		<td><%= @event.series_title %></td>
-		<td><%= @event.series_country_code %></td>
-		<td><%= @event.series_logo %></td>
-		<td><% if @event.series_description.present? %><%= @event.series_description[0..50] %><% end %></td>
-		<td><%= @event.series_url %></td>
-	</tr>
-	<% end %>
-</table>
+<% for events_set in @events.each_slice(3) %>
+	<div class="row">
+		<% for event in events_set %>
+		<div class="col-xs-4">
+			<%= link_to event_path(event), :class => "events_card_link" do %>
+				<div class="events_card">
+					<% if event.title.present? %>
+						<p>
+							<span class="events_card_title">
+								<%= event.title[0..50] %>
+								<% if event.title.length > 50 %>...<% end %>
+							</span>
+						</p>
+					<% end %>
+					<hr>
+					<% if event.description.present? %>
+						<%= Sanitize.clean(event.description, Sanitize::Config::CUSTOM)[0..100] %>
+						<% if event.description.length > 100 %>...<% end %>
+						<hr>
+					<% end %>
+					<p>
+						<span class="events_card_label">Date</span>
+						<%= event.started_at %>
+					</p>
+					<p>
+						<span class="events_card_label">Adress</span>
+						<%= event.adress %>
+					</p>
+					<p>
+						<span class="events_card_label">Place</span>
+						<%= event.place %>
+					</p>
+				</div>
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+<% end %>
 
 <div><%= paginate(@events, :window => 3) %></div>
