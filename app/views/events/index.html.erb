@@ -21,6 +21,8 @@
 	<% end %>
 </div>
 
+<!-- index -->
+
 <div>Total : <%= @events.total_count %></div>
 
 <% for events_set in @events.each_slice(3) %>
@@ -36,25 +38,33 @@
 								<% if event.title.length > 50 %>...<% end %>
 							</span>
 						</p>
-					<% end %>
-					<hr>
-					<% if event.description.present? %>
-						<%= Sanitize.clean(event.description, Sanitize::Config::CUSTOM)[0..100] %>
-						<% if event.description.length > 100 %>...<% end %>
 						<hr>
 					<% end %>
-					<p>
-						<span class="events_card_label">Date</span>
-						<%= event.started_at %>
-					</p>
-					<p>
-						<span class="events_card_label">Adress</span>
-						<%= event.adress %>
-					</p>
-					<p>
-						<span class="events_card_label">Place</span>
-						<%= event.place %>
-					</p>
+					<% if event.description.present? %>
+						<p>
+							<%= Sanitize.clean(event.description, Sanitize::Config::CUSTOM)[0..100] %>
+							<% if event.description.length > 100 %>...<% end %>
+						</p>
+						<hr>
+					<% end %>
+					<% if event.started_at.present? %>
+						<p>
+							<span class="events_card_label">Date</span>
+							<%= event.started_at.to_s[0..9] %>
+						</p>
+					<% end %>
+					<% if event.adress.present? %>
+						<p>
+							<span class="events_card_label">Adress</span>
+							<%= event.adress %>
+						</p>
+					<% end %>
+					<% if event.place.present? %>
+						<p>
+							<span class="events_card_label">Place</span>
+							<%= event.place %>
+						</p>
+					<% end %>
 				</div>
 			<% end %>
 		</div>

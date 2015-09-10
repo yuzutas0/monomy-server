@@ -8,8 +8,8 @@ class Event < ActiveRecord::Base
 		self.__elasticsearch__.import
 	end
 
-	def self.show_index(query, page)
-		response = self.search(query).page(page).records
+	def self.show_index(query, page, per)
+		response = self.search(query).page(page).per(per).records
 	end
 
 	def more_like_this!

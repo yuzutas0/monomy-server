@@ -1,53 +1,257 @@
+<nav class="navbar">
+	<%= form_tag('/events', method: "get", enforce_utf8: false, class: "navbar-form navbar-right") do %>
+		<div class="form-group">
+			<%= text_field :freeword, :content, placeholder: "search", class: "form-control" %>
+			<%= submit_tag "検索", name: nil, class: "btn btn-primary" %>
+		</div>
+	<% end %>
+
+	<div class="navbar-left">
+		<%= link_to "ATND", events_path(source_id: 1), method: :get, class: "btn" %>
+		<%= link_to "Doorkeeper", events_path(source_id: 2), method: :get, class: "btn" %>
+		<%= link_to "Zusaar", events_path(source_id: 3), method: :get, class: "btn" %>
+		<%= link_to "Connpass", events_path(source_id: 4), method: :get, class: "btn" %>
+		<div>
+			<a onclick="history.back()" class="btn">
+				<span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+				前の画面に戻る
+			</a>
+		</div>
+	</div>
+</nav>
+
 <div>
-	<p>source_id:<%= @event.source_id %></p>
-	<p>source_event_id:<%= @event.source_event_id %></p>
-	<p>title:<%= @event.title %></p>
-	<p>catchtext:<%= @event.catchtext %></p>
-	<p>description:<%= @event.description %></p>
-	<p>detail_url:<%= @event.detail_url %></p>
-	<p>hash_tag:<%= @event.hash_tag %></p>
-	<p>started_at:<%= @event.started_at %></p>
-	<p>ended_at:<%= @event.ended_at %></p>
-	<p>pay_type:<%= @event.pay_type %></p>
-	<p>event_type:<%= @event.event_type %></p>
-	<p>reference_url:<%= @event.reference_url %></p>
-	<p>limit:<%= @event.limit %></p>
-	<p>adress:<%= @event.adress %></p>
-	<p>place:<%= @event.place %></p>
-	<p>lat:<%= @event.lat %></p>
-	<p>lon:<%= @event.lon %></p>
-	<p>owner_id:<%= @event.owner_id %></p>
-	<p>owner_profile_url:<%= @event.owner_profile_url %></p>
-	<p>owner_nickname:<%= @event.owner_nickname %></p>
-	<p>owner_twitter_id:<%= @event.owner_twitter_id %></p>
-	<p>owner_display_name:<%= @event.owner_display_name %></p>
-	<p>accepted:<%= @event.accepted %></p>
-	<p>waiting:<%= @event.waiting %></p>
-	<p>banner:<%= @event.banner %></p>
-	<p>source_published_at:<%= @event.source_published_at %></p>
-	<p>source_updated_at:<%= @event.source_updated_at %></p>
-	<p>series_id:<%= @event.series_id %></p>
-	<p>series_title:<%= @event.series_title %></p>
-	<p>series_country_code:<%= @event.series_country_code %></p>
-	<p>series_logo:<%= @event.series_logo %></p>
-	<p>series_description:<%= @event.series_description %></p>
-	<p>series_url:<%= @event.series_url %></p>
+	<% flash.each do |key, value| %>
+	  <%= content_tag(:div, value, class: "alert alert-danger") %>
+	<% end %>
 </div>
 
-<hr>
+<!-- show -->
 
-<% if @recommends.present? %>
-	<div>
-		<p>
-			<%= @event.title %><br />
-			......に似ているイベント
-		</p>
-		<% for recommend in @recommends %>
-			<p>
-				<%= link_to "#{recommend.title}", event_path(recommend.id), method: :get %>
-				（<%= recommend.started_at[0..9] %>）
-				＠<%= recommend.place %>
-			</p>
+<div class="row">
+	<div class="col-xs-8">
+		<% if @event.title.present? || @event.catchtext.present? || @event.source_id.present? || @event.source_event_id.present? %>
+			<div class="event_detail_card">
+				<% if @event.title.present? %>
+					<p>
+						<span class="event_detail_card_shadow">title</span>
+						<span class="event_detail_card_title"><%= @event.title %></span>
+					</p>
+				<% end %>
+				<% if @event.catchtext.present? %>
+					<p>
+						<span class="event_detail_card_shadow">catchtext</span>
+						<span class="event_detail_card_title"><%= @event.catchtext %></span>
+					</p>
+				<% end %>
+				<% if @event.source_id.present? %>
+					<p class="event_detail_card_shadow">source_id <%= @event.source_id %></p>
+				<% end %>
+				<% if @event.source_event_id.present? %>
+					<p class="event_detail_card_shadow">source_event_id <%= @event.source_event_id %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<% if @event.description.present? %>
+			<div class="event_detail_card">
+				<p class="event_detail_card_wide_label">description</p>
+				<p><%= raw Sanitize.clean(@event.description, Sanitize::Config::RELAXED) %></p>
+			</div>
+		<% end %>
+
+
+		<% if @event.detail_url.present? || @event.hash_tag.present? || @event.started_at.present? || @event.ended_at.present? || @event.pay_type.present? || @event.event_type.present? || @event.reference_url.present? || @event.limit.present? %>
+			<div class="event_detail_card">
+				<% if @event.detail_url.present? %>
+					<p class="event_detail_card_wide_label">detail_url</p>
+					<p><%= @event.detail_url %></p>
+					<hr>
+				<% end %>
+				<% if @event.hash_tag.present? %>
+					<p><span class="event_detail_card_shadow">hash_tag</span> <%= @event.hash_tag %></p>
+				<% end %>
+				<% if @event.started_at.present? %>
+					<p><span class="event_detail_card_shadow">started_at</span> <%= @event.started_at %></p>
+				<% end %>
+				<% if @event.ended_at.present? %>
+					<p><span class="event_detail_card_shadow">ended_at</span> <%= @event.ended_at %></p>
+				<% end %>
+				<% if @event.pay_type.present? %>
+					<p><span class="event_detail_card_shadow">pay_type</span> <%= @event.pay_type %></p>
+				<% end %>
+				<% if @event.event_type.present? %>
+					<p><span class="event_detail_card_shadow">event_type</span> <%= @event.event_type %></p>
+				<% end %>
+				<% if @event.reference_url.present? %>
+					<p><span class="event_detail_card_shadow">reference_url</span> <%= @event.reference_url %></p>
+				<% end %>
+				<% if @event.limit.present? %>
+					<p><span class="event_detail_card_shadow">limit</span> <%= @event.limit %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<% if @event.adress.present? || @event.place.present? || @event.lat.present? || @event.lon.present? %>
+			<div class="event_detail_card">
+				<% if @event.adress.present? %>
+					<p class="event_detail_card_wide_label">adress</p>
+					<p><%= @event.adress %></p>
+					<hr>
+				<% end %>
+				<% if @event.place.present? %>
+					<p><span class="event_detail_card_shadow">place</span> <%= @event.place %></p>
+				<% end %>
+				<% if @event.lat.present? %>
+					<p><span class="event_detail_card_shadow">lat</span> <%= @event.lat %></p>
+				<% end %>
+				<% if @event.lon.present? %>
+					<p><span class="event_detail_card_shadow">lon</span> <%= @event.lon %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<% if @event.owner_id.present? || @event.owner_profile_url.present? || @event.owner_nickname.present? || @event.owner_twitter_id.present? || @event.owner_twitter_id.present? %>
+			<div class="event_detail_card">
+				<% if @event.owner_id.present? %>
+					<p class="event_detail_card_wide_label">owner_id</p>
+					<p><%= @event.owner_id %></p>
+					<hr>
+				<% end %>
+				<% if @event.owner_profile_url.present? %>
+					<p><span class="event_detail_card_shadow">owner_profile_url</span> <%= @event.owner_profile_url %></p>
+				<% end %>
+				<% if @event.owner_nickname.present? %>
+					<p><span class="event_detail_card_shadow">owner_nickname</span> <%= @event.owner_nickname %></p>
+				<% end %>
+				<% if @event.owner_twitter_id.present? %>
+					<p><span class="event_detail_card_shadow">owner_twitter_id</span> <%= @event.owner_twitter_id %></p>
+				<% end %>
+				<% if @event.owner_display_name.present? %>
+					<p><span class="event_detail_card_shadow">owner_display_name</span> <%= @event.owner_display_name %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<% if @event.accepted.present? || @event.waiting.present? || @event.banner.present? || @event.source_published_at.present? || @event.source_updated_at.present? %>
+			<div class="event_detail_card">
+				<% if @event.accepted.present? || @event.waiting.present? %>
+					<p>
+						<span class="event_detail_card_shadow">accepted</span>
+						<% if @event.accepted.present? %><%= @event.accepted %>
+						<% else %>0
+						<% end %>
+						+
+						<span class="event_detail_card_shadow">waiting</span>
+						<% if @event.waiting.present? %><%= @event.waiting %>
+						<% else %>0
+						<% end %>
+					</p>
+					<hr>
+				<% end %>
+				<% if @event.banner.present? %>
+					<p><span class="event_detail_card_shadow">banner</span> <%= @event.banner %></p>
+				<% end %>
+				<% if @event.source_published_at.present? %>
+					<p><span class="event_detail_card_shadow">source_published_at</span> <%= @event.source_published_at %></p>
+				<% end %>
+				<% if @event.source_updated_at.present? %>
+					<p><span class="event_detail_card_shadow">source_updated_at</span> <%= @event.source_updated_at %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<% if @event.series_id.present? || @event.series_title.present? || @event.series_country_code.present? || @event.series_logo.present? || @event.series_description.present? || @event.series_url.present? %>
+			<div class="event_detail_card">
+				<% if @event.series_id.present? %>
+					<p class="event_detail_card_wide_label">series_id</p>
+					<p><%= @event.series_id %></p>
+					<hr>
+				<% end %>
+				<% if @event.series_title.present? %>
+					<p><span class="event_detail_card_shadow">series_title</span> <%= @event.series_title %></p>
+				<% end %>
+				<% if @event.series_country_code.present? %>
+					<p><span class="event_detail_card_shadow">series_country_code</span> <%= @event.series_country_code %></p>
+				<% end %>
+				<% if @event.series_logo.present? %>
+					<p><span class="event_detail_card_shadow">series_logo</span> <%= @event.series_logo %></p>
+				<% end %>
+				<% if @event.series_description.present? %>
+					<p><span class="event_detail_card_shadow">series_description</span> <%= @event.series_description %></p>
+				<% end %>
+				<% if @event.series_url.present? %>
+					<p><span class="event_detail_card_shadow">series_url</span> <%= @event.series_url %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+		<%= button_to "Send to your email", event_path(@event.id), :class => "btn btn-primary event_detail_to_mail_button", :method => 'get' %>
+	</div>
+
+	<div class="col-xs-4">
+		<div class="event_recommend_outer_card">
+				<p class="event_recommend_outer_card_blank">広告募集中</p>
+		</div>
+		
+		<% if @recommends.present? %>
+			<div>
+				<div class="event_recommend_outer_card">
+					<p>
+						<span class="event_recommend_outer_card_title">
+							<%= @event.title[0..50] %>
+						</span>
+						<br />
+						......に似ているイベント
+					</p>
+
+					<% for recommend in @recommends %>
+						<%= link_to event_path(recommend.id), :class => "event_recommend_card_link" do %>
+							<div class="event_recommend_card">
+								<% if recommend.title.present? %>
+									<p>
+										<span class="event_recommend_card_title">
+											<%= recommend.title[0..50] %>
+											<% if recommend.title.length > 50 %>...<% end %>
+										</span>
+									</p>
+									<hr>
+								<% end %>
+								<% if recommend.description.present? %>
+									<p>
+										<%= Sanitize.clean(recommend.description, Sanitize::Config::CUSTOM)[0..100] %>
+										<% if recommend.description.length > 100 %>...<% end %>
+									</p>
+									<hr>
+								<% end %>
+								<% if recommend.started_at.present? %>
+									<p>
+										<span class="event_recommend_card_label">Date</span>
+										<%= recommend.started_at[0..9] %>
+									</p>
+								<% end %>
+								<% if recommend.adress.present? %>
+									<p>
+										<span class="event_recommend_card_label">Adress</span>
+										<%= recommend.adress %>
+									</p>
+								<% end %>
+								<% if recommend.place.present? %>
+									<p>
+										<span class="event_recommend_card_label">Place</span>
+										<%= recommend.place %>
+									</p>
+								<% end %>
+							</div>
+						<% end %>
+					<% end %>
+				</div>
+			</div>
 		<% end %>
 	</div>
-<% end %>
+</div>

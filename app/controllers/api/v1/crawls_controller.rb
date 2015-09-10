@@ -8,6 +8,7 @@ module Api
 				message = "OK"
 
 				begin
+					Event.create_index                 if id == "100"
 					Crawls::Robots::Atnd.execute       if id == "1"
 					Crawls::Robots::Doorkeeper.execute if id == "2"
 					Crawls::Robots::Zusaar.execute     if id == "3"
