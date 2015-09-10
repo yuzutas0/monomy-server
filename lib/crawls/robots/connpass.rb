@@ -37,7 +37,7 @@ class Crawls::Robots::Connpass
 
 				# loop : event
 				parsed.each do |event_inner|
-					new_event = Crawls::Converter.getEvent(SOURCE_ID, event_inner)
+					new_event = Crawls::Converter.get_event(SOURCE_ID, event_inner)
 
 					# find same event
 					next if new_event.source_id.blank? || new_event.source_event_id.blank?
@@ -49,7 +49,7 @@ class Crawls::Robots::Connpass
 					if old_event.present?
 						# update
 						next if new_event.source_updated_at <= old_event.source_updated_at
-						Crawls::Converter.updateEvent(old_event, new_event)
+						Crawls::Converter.update_event(old_event, new_event)
 					else
 						# add insert list
 						insert_list << new_event

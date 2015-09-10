@@ -9,6 +9,12 @@ Rails.application.routes.draw do
   root 'events#index' # todo: delete
   resources :events
 
+  namespace :api, format: 'json' do
+    namespace :v1 do
+      get 'crawls/:id' => 'crawls#execute'
+    end
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

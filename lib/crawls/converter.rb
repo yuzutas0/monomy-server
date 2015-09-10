@@ -1,45 +1,49 @@
 # encoding: utf-8
 class Crawls::Converter
 
-	# rails runner Crawls::Converter.updateEvent(old_event, new_event)
-	def self.updateEvent(old_event, new_event)
-		old_event.update_attributes!({ :source_id => new_event.source_id,
-																		:source_event_id => new_event.source_event_id,
-																		:title => new_event.title,
-																		:catchtext => new_event.catchtext,
-																		:description => new_event.description,
-																		:detail_url => new_event.detail_url,
-																		:hash_tag => new_event.hash_tag,
-																		:started_at => new_event.started_at,
-																		:ended_at => new_event.ended_at,
-																		:pay_type => new_event.pay_type,
-																		:event_type => new_event.event_type,
-																		:reference_url => new_event.reference_url,
-																		:limit => new_event.limit,
-																		:adress => new_event.adress,
-																		:place => new_event.place,
-																		:lat => new_event.lat,
-																		:lon => new_event.lon,
-																		:owner_id => new_event.owner_id,
-																		:owner_profile_url => new_event.owner_profile_url,
-																		:owner_nickname => new_event.owner_nickname,
-																		:owner_twitter_id => new_event.owner_twitter_id,
-																		:owner_display_name => new_event.owner_display_name,
-																		:accepted => new_event.accepted,
-																		:waiting => new_event.waiting,
-																		:banner => new_event.banner,
-																		:source_published_at => new_event.source_published_at,
-																		:source_updated_at => new_event.source_updated_at,
-																		:series_id => new_event.series_id,
-																		:series_title => new_event.series_title,
-																		:series_country_code => new_event.series_country_code,
-																		:series_logo => new_event.series_logo,
-																		:series_description => new_event.series_description,
-																		:series_url => new_event.series_url })
+	# rails runner Crawls::Converter.update_event(old_event, new_event)
+	def self.update_event(old_event, new_event)
+		begin
+			old_event.update_attributes!({ :source_id => new_event.source_id,
+																			:source_event_id => new_event.source_event_id,
+																			:title => new_event.title,
+																			:catchtext => new_event.catchtext,
+																			:description => new_event.description,
+																			:detail_url => new_event.detail_url,
+																			:hash_tag => new_event.hash_tag,
+																			:started_at => new_event.started_at,
+																			:ended_at => new_event.ended_at,
+																			:pay_type => new_event.pay_type,
+																			:event_type => new_event.event_type,
+																			:reference_url => new_event.reference_url,
+																			:limit => new_event.limit,
+																			:adress => new_event.adress,
+																			:place => new_event.place,
+																			:lat => new_event.lat,
+																			:lon => new_event.lon,
+																			:owner_id => new_event.owner_id,
+																			:owner_profile_url => new_event.owner_profile_url,
+																			:owner_nickname => new_event.owner_nickname,
+																			:owner_twitter_id => new_event.owner_twitter_id,
+																			:owner_display_name => new_event.owner_display_name,
+																			:accepted => new_event.accepted,
+																			:waiting => new_event.waiting,
+																			:banner => new_event.banner,
+																			:source_published_at => new_event.source_published_at,
+																			:source_updated_at => new_event.source_updated_at,
+																			:series_id => new_event.series_id,
+																			:series_title => new_event.series_title,
+																			:series_country_code => new_event.series_country_code,
+																			:series_logo => new_event.series_logo,
+																			:series_description => new_event.series_description,
+																			:series_url => new_event.series_url })
+		rescue => e
+			puts e.message
+		end
 	end
 
-	# rails runner Crawls::Converter.getEvent(source_id, source_array)
-	def self.getEvent(source_id, source_array)
+	# rails runner Crawls::Converter.get_event(source_id, source_array)
+	def self.get_event(source_id, source_array)
 		
 		event = Event.new
 		event.source_id = source_id
@@ -123,12 +127,13 @@ class Crawls::Converter
 		event.source_updated_at = source_array['updated_at']
 
 		if source_id == 2 && source_array['group'].present?
-			event.series_id = source_array['group']['id']
-			event.series_title = source_array['group']['name']
-			event.series_country_code = source_array['group']['country_code']
-			event.series_logo = source_array['group']['logo']
-			event.series_description = source_array['group']['description']
-			event.series_url = source_array['group']['public_url']
+			event.series_id = source_array['group']
+			# event.series_id = source_array['group']['id']
+			# event.series_title = source_array['group']['name']
+			# event.series_country_code = source_array['group']['country_code']
+			# event.series_logo = source_array['group']['logo']
+			# event.series_description = source_array['group']['description']
+			# event.series_url = source_array['group']['public_url']
 		elsif source_id == 4 && source_array['series'].present?
 			event.series_id = source_array['series']['id']
 			event.series_title = source_array['series']['title']

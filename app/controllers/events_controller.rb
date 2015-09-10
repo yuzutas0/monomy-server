@@ -23,7 +23,7 @@ class EventsController < ApplicationController
 		begin
 			@recommends = recommends if recommends.present?			
 		rescue Exception => e
-			logger.debug "not find recommends"
+			puts "not find recommends"
 		end
 	end
 
