@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+
+// events_list
+
 .events_card_link:link, .events_card_link:visited {
 	color: rgba(0,0,0,0.6);
 	text-decoration: none;
@@ -29,6 +33,8 @@
 }
 
 
+
+// event_detail
 
 .event_detail_card {
 	padding: 10px;
@@ -117,4 +123,34 @@
 	border: 1px solid #6fa8dc;
 	border-radius: 4px;
 }
+
+
+
+// mail
+
+.mail_card {
+	padding: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background: #fff;
+	box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+	color: rgba(0,0,0,0.6);
+}
+
+.mail_card_label {
+	color: #FFF;
+	background: #6fa8dc;
+	padding: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #6fa8dc;
+	border-radius: 4px;
+}
+
+.mail_submit_button {
+	width: 100%;
+	height: 100px;
+	margin: 20px auto;
+}
+
+
 

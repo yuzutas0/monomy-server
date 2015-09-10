@@ -1,8 +1,8 @@
 <nav class="navbar">
 	<%= form_tag('/events', method: "get", enforce_utf8: false, class: "navbar-form navbar-right") do %>
 		<div class="form-group">
-			<%= text_field :freeword, :content, placeholder: "search", class: "form-control" %>
-			<%= submit_tag "検索", name: nil, class: "btn btn-primary" %>
+			<%= text_field :freeword, :content, placeholder: "Keyword", class: "form-control" %>
+			<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
 		</div>
 	<% end %>
 
@@ -17,7 +17,11 @@
 
 <div>
 	<% flash.each do |key, value| %>
-	  <%= content_tag(:div, value, class: "alert alert-danger") %>
+		<% if key == "notice" %>
+		  <%= content_tag(:div, value, class: "alert alert-success") %>
+	  <% else %>
+	  	<%= content_tag(:div, value, class: "alert alert-danger") %>
+	  <% end %>
 	<% end %>
 </div>
 

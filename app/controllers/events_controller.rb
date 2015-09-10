@@ -20,7 +20,11 @@ class EventsController < ApplicationController
 	end
 
 	def show
-		@event = Event.find(params[:id])
+		begin
+			@event = Event.find(params[:id])
+		rescue
+			return redirect_to root_path
+		end
 		recommends = @event.more_like_this
 		begin
 			@recommends = recommends if recommends.present?			

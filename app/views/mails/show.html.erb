@@ -1,0 +1,114 @@
+<nav class="navbar">
+	<%= form_tag('/events', method: "get", enforce_utf8: false, class: "navbar-form navbar-right") do %>
+		<div class="form-group">
+			<%= text_field :freeword, :content, placeholder: "Keyword", class: "form-control" %>
+			<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+		</div>
+	<% end %>
+
+	<div class="navbar-left">
+		<%= link_to "ATND", events_path(source_id: 1), method: :get, class: "btn" %>
+		<%= link_to "Doorkeeper", events_path(source_id: 2), method: :get, class: "btn" %>
+		<%= link_to "Zusaar", events_path(source_id: 3), method: :get, class: "btn" %>
+		<%= link_to "Connpass", events_path(source_id: 4), method: :get, class: "btn" %>
+		<div>
+			<a onclick="history.back()" class="btn">
+				<span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+				Back To Previous Page
+			</a>
+		</div>
+	</div>
+</nav>
+
+<div>
+	<% flash.each do |key, value| %>
+		<% if key == "notice" %>
+		  <%= content_tag(:div, value, class: "alert alert-success") %>
+	  <% else %>
+	  	<%= content_tag(:div, value, class: "alert alert-danger") %>
+	  <% end %>
+	<% end %>
+</div>
+
+<!-- show -->
+
+<div class="row">
+	<div class="col-xs-8">
+		<div class="mail_card">
+			<p>Do you send this information to your email adress?</p>
+			<hr>
+			<%= form_tag('/mails') do %>
+				<div class="row">
+					<div class="col-xs-6">
+						<p class="mail_card_label">Event</p>
+						<p><%= link_to "#{@event.title}", event_path(@event) %></p>
+						<%= hidden_field :event, :id, :readonly => true %>
+					</div>
+					<div class="col-xs-6">
+						<p class="mail_card_label">Mail Adress</p>
+						<p><%= text_field :mail, :adress, placeholder: "foobar@example.com", class: "form-control" %></p>
+					</div>
+				</div>
+				<hr>
+				<%= submit_tag "Send Mail", name: nil, class: "btn btn-primary mail_submit_button" %>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="col-xs-4">
+		<% if @recommends.present? %>
+			<div class="event_recommend_outer_card">
+				<p>
+					<span class="event_recommend_outer_card_title">
+						<%= @event.title[0..50] %>
+					</span>
+					<br />
+					......に似ているイベント
+				</p>
+				<% recommend = @recommends[0] %>
+				<%= link_to event_path(recommend.id), :class => "event_recommend_card_link" do %>
+					<div class="event_recommend_card">
+						<% if recommend.title.present? %>
+							<p>
+								<span class="event_recommend_card_title">
+									<%= recommend.title[0..50] %>
+									<% if recommend.title.length > 50 %>...<% end %>
+								</span>
+							</p>
+							<hr>
+						<% end %>
+						<% if recommend.description.present? %>
+							<p>
+								<%= Sanitize.clean(recommend.description, Sanitize::Config::CUSTOM)[0..100] %>
+								<% if recommend.description.length > 100 %>...<% end %>
+							</p>
+							<hr>
+						<% end %>
+						<% if recommend.started_at.present? %>
+							<p>
+								<span class="event_recommend_card_label">Date</span>
+								<%= recommend.started_at[0..9] %>
+							</p>
+						<% end %>
+						<% if recommend.adress.present? %>
+							<p>
+								<span class="event_recommend_card_label">Adress</span>
+								<%= recommend.adress %>
+							</p>
+						<% end %>
+						<% if recommend.place.present? %>
+							<p>
+								<span class="event_recommend_card_label">Place</span>
+								<%= recommend.place %>
+							</p>
+						<% end %>
+					</div>
+				<% end %>
+			</div>
+		<% else %>
+			<div class="event_recommend_outer_card">
+				<p class="event_recommend_outer_card_blank">広告募集中</p>
+			</div>
+		<% end %>
+	</div>
+</div>

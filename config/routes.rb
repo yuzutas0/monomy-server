@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   root 'events#index' # todo: delete
   resources :events
 
+  resources :mails, :only => [:show, :create]
+
   namespace :api, format: 'json' do
     namespace :v1 do
       get 'crawls/:id' => 'crawls#execute'
