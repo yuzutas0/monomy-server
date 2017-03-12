@@ -9,20 +9,20 @@ class Crawls::Robots::Zusaar
 
   # rails runner Crawls::Robots::Zusaar.execute
   def self.execute
-    puts "Zusaar"
+    puts 'Zusaar'
 
     # loop : yymm (e.g. 201508 - 201512)
     date = Date.today
     for after_month in 0..4
 
       # loop : start (1, 101, 201, ..., last)
-      date_string = (date >> after_month).strftime("%Y%m")
+      date_string = (date >> after_month).strftime('%Y%m')
       start_count = 1
       get_count = 10 # todo 100
       loop do
 
         # HTTP
-        request_uri = "http://www.zusaar.com/api/event/?ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
+        request_uri = 'http://www.zusaar.com/api/event/?ym=' + date_string + '&count=' + get_count.to_s + '&start=' + start_count.to_s
         response = open(request_uri, &:read).toutf8
         sleep(2)
 
@@ -41,7 +41,7 @@ class Crawls::Robots::Zusaar
 
           # find same event
           next if new_event.source_id.blank? || new_event.source_event_id.blank?
-          find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+          find_event_query = 'source_id = :source_id AND source_event_id = :source_event_id'
           old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
           old_event = old_events[0] if old_events.present?
 
