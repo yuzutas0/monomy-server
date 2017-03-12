@@ -28,7 +28,7 @@ class EventsController < ApplicationController
 		recommends = @event.more_like_this
 		begin
 			@recommends = recommends if recommends.present?			
-		rescue Exception => e
+		rescue
 			puts "not find recommends"
 		end
 	end

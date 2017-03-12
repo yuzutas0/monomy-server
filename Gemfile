@@ -34,6 +34,7 @@ gem 'elasticsearch-rails', '0.1.7'
 gem 'elasticsearch-model', '0.1.7'
 gem 'yaml_db', '0.3.0'
 gem 'sanitize', '4.0.0'
+gem 'sendgrid_ruby', '0.0.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

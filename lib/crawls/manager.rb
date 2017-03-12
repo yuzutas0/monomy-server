@@ -12,7 +12,7 @@ class Crawls::Manager
 	# rails runner Crawls::Manager.test
 	def self.test
 		Event.create_index
-		for event in Event.show_index('Ruby', 2)
+		for event in Event.show_index('Ruby', 2, 10)
 			puts event.title
 		end
 	end

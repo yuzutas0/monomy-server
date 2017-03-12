@@ -18,7 +18,7 @@ class Crawls::Robots::Zusaar
 			# loop : start (1, 101, 201, ..., last)
 			date_string = (date >> after_month).strftime("%Y%m")
 			start_count = 1
-			get_count = 100
+			get_count = 10 # todo 100
 			loop do
 
 				# HTTP
@@ -57,7 +57,11 @@ class Crawls::Robots::Zusaar
 				end
 
 				# bulk insert
-				Event.import(insert_list)
+				begin
+					Event.import(insert_list)
+				rescue => e
+					puts e.message
+				end
 
 				# ready for next-loop
 				break if parsed.length < get_count
