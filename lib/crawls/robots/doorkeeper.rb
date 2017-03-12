@@ -1,82 +1,79 @@
 # encoding: utf-8
 class Crawls::Robots::Doorkeeper
 
-	require 'open-uri'
-	require 'kconv'
-	require 'json'
+  require 'open-uri'
+  require 'kconv'
+  require 'json'
 
-	SOURCE_ID = 2
+  SOURCE_ID = 2
 
-	# rails runner Crawls::Robots::Doorkeeper.execute
-	def self.execute
-		puts "Doorkeeper"
+  # rails runner Crawls::Robots::Doorkeeper.execute
+  def self.execute
+    puts "Doorkeeper"
 
-		# loop : start (1, 2, 3, ..., last)
-		page = 1
-		get_count = 25
-		same_loop = 0
-		date = Date.today
-		until_date = Date.today >> 4
-		loop do
+    # loop : start (1, 2, 3, ..., last)
+    page = 1
+    get_count = 25
+    same_loop = 0
+    date = Date.today
+    until_date = Date.today >> 4
+    loop do
 
-			# HTTP
-			request_uri = "http://api.doorkeeper.jp/events/?since=" + date.to_s + "&until" + until_date.to_s + "&page=" + page.to_s
-			response = open(request_uri, &:read).toutf8
-			sleep(2)
+      # HTTP
+      request_uri = "http://api.doorkeeper.jp/events/?since=" + date.to_s + "&until" + until_date.to_s + "&page=" + page.to_s
+      response = open(request_uri, &:read).toutf8
+      sleep(2)
 
-			# JSON Parse
-			json = JSON.parser.new(response)
-			begin
-				parsed = json.parse()				
-			rescue Exception => e
-				same_loop += 1
-				next if same_loop < 5
-				page += 1
-				same_loop = 0
-				next
-			end
-			same_loop = 0
+      # JSON Parse
+      json = JSON.parser.new(response)
+      begin
+        parsed = json.parse()
+      rescue Exception => e
+        same_loop += 1
+        next if same_loop < 5
+        page += 1
+        same_loop = 0
+        next
+      end
+      same_loop = 0
 
-			break unless parsed.length > 0
+      break unless parsed.length > 0
 
-			# ready for bulk insert
-			insert_list = []
+      # ready for bulk insert
+      insert_list = []
 
-			# loop : event
-			parsed.each do |event_outer|
-				event_inner = event_outer['event']
-				new_event = Crawls::Converter.get_event(SOURCE_ID, event_inner)
+      # loop : event
+      parsed.each do |event_outer|
+        event_inner = event_outer['event']
+        new_event = Crawls::Converter.get_event(SOURCE_ID, event_inner)
 
-				# find same event
-				next if new_event.source_id.blank? || new_event.source_event_id.blank?
-				find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
-				old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
-				old_event = old_events[0] if old_events.present?
+        # find same event
+        next if new_event.source_id.blank? || new_event.source_event_id.blank?
+        find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+        old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+        old_event = old_events[0] if old_events.present?
 
-				next if new_event.source_updated_at.blank?
-				if old_event.present?
-					# update
-					next if new_event.source_updated_at <= old_event.source_updated_at
-					Crawls::Converter.update_event(old_event, new_event)
-				else
-					# add insert list
-					insert_list << new_event
-				end
-			end
+        next if new_event.source_updated_at.blank?
+        if old_event.present?
+          # update
+          next if new_event.source_updated_at <= old_event.source_updated_at
+          Crawls::Converter.update_event(old_event, new_event)
+        else
+          # add insert list
+          insert_list << new_event
+        end
+      end
 
-			# bulk insert
-			Event.import(insert_list)
+      # bulk insert
+      Event.import(insert_list)
 
-			# ready for next-loop
-			break if parsed.length < get_count
-			page += 1
-		end
-	end
+      # ready for next-loop
+      break if parsed.length < get_count
+      page += 1
+    end
+  end
 
 end
-
-
-
 
 
 # --------------------------------------------------------------------
