@@ -1,75 +1,72 @@
 # encoding: utf-8
 class Crawls::Robots::Connpass
 
-	require 'open-uri'
-	require 'kconv'
-	require 'json'
+  require 'open-uri'
+  require 'kconv'
+  require 'json'
 
-	SOURCE_ID = 4
+  SOURCE_ID = 4
 
-	# rails runner Crawls::Robots::Connpass.execute
-	def self.execute
-		puts "Connpass"
+  # rails runner Crawls::Robots::Connpass.execute
+  def self.execute
+    puts "Connpass"
 
-		# loop : yymm (e.g. 201508 - 201512)
-		date = Date.today
-		for after_month in 0..4
+    # loop : yymm (e.g. 201508 - 201512)
+    date = Date.today
+    for after_month in 0..4
 
-			# loop : start (1, 101, 201, ..., last)
-			date_string = (date >> after_month).strftime("%Y%m")
-			start_count = 1
-			get_count = 100
-			loop do
+      # loop : start (1, 101, 201, ..., last)
+      date_string = (date >> after_month).strftime("%Y%m")
+      start_count = 1
+      get_count = 100
+      loop do
 
-				# HTTP
-				request_uri = "http://connpass.com/api/v1/event/?ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
-				response = open(request_uri, &:read).toutf8
-				sleep(2)
+        # HTTP
+        request_uri = "http://connpass.com/api/v1/event/?ym=" + date_string + "&count=" + get_count.to_s + "&start=" + start_count.to_s
+        response = open(request_uri, &:read).toutf8
+        sleep(2)
 
-				# JSON Parse
-				json = JSON.parser.new(response)
-				hash = json.parse()
-				parsed = hash['events']
-				break unless parsed.length > 0
+        # JSON Parse
+        json = JSON.parser.new(response)
+        hash = json.parse()
+        parsed = hash['events']
+        break unless parsed.length > 0
 
-				# ready for bulk insert
-				insert_list = []
+        # ready for bulk insert
+        insert_list = []
 
-				# loop : event
-				parsed.each do |event_inner|
-					new_event = Crawls::Converter.get_event(SOURCE_ID, event_inner)
+        # loop : event
+        parsed.each do |event_inner|
+          new_event = Crawls::Converter.get_event(SOURCE_ID, event_inner)
 
-					# find same event
-					next if new_event.source_id.blank? || new_event.source_event_id.blank?
-					find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
-					old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
-					old_event = old_events[0] if old_events.present?
+          # find same event
+          next if new_event.source_id.blank? || new_event.source_event_id.blank?
+          find_event_query = "source_id = :source_id AND source_event_id = :source_event_id"
+          old_events = Event.where(find_event_query, source_id: new_event.source_id, source_event_id: new_event.source_event_id)
+          old_event = old_events[0] if old_events.present?
 
-					next if new_event.source_updated_at.blank?
-					if old_event.present?
-						# update
-						next if new_event.source_updated_at <= old_event.source_updated_at
-						Crawls::Converter.update_event(old_event, new_event)
-					else
-						# add insert list
-						insert_list << new_event
-					end
-				end
+          next if new_event.source_updated_at.blank?
+          if old_event.present?
+            # update
+            next if new_event.source_updated_at <= old_event.source_updated_at
+            Crawls::Converter.update_event(old_event, new_event)
+          else
+            # add insert list
+            insert_list << new_event
+          end
+        end
 
-				# bulk insert
-				Event.import(insert_list)
+        # bulk insert
+        Event.import(insert_list)
 
-				# ready for next-loop
-				break if parsed.length < get_count
-				start_count += parsed.length
-			end
-		end
-	end
+        # ready for next-loop
+        break if parsed.length < get_count
+        start_count += parsed.length
+      end
+    end
+  end
 
 end
-
-
-
 
 
 # --------------------------------------------------------------------
