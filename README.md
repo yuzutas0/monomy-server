@@ -1,4 +1,8 @@
-# Class構成
+# 概要
+
+IT系勉強会まとめアプリ
+
+# 構成
 
 * [d]app
   * [d]controllers
