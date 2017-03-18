@@ -5,14 +5,14 @@ module Api
       def execute
         id = params[:id]
         started_at = Time.now
-        message = "OK"
+        message = 'OK'
 
         begin
-          Event.create_index if id == "100"
-          Crawls::Robots::Atnd.execute if id == "1"
-          Crawls::Robots::Doorkeeper.execute if id == "2"
-          Crawls::Robots::Zusaar.execute if id == "3"
-          Crawls::Robots::Connpass.execute if id == "4"
+          Event.create_index if id == '100'
+          Crawls::Robots::Atnd.execute if id == '1'
+          Crawls::Robots::Doorkeeper.execute if id == '2'
+          Crawls::Robots::Zusaar.execute if id == '3'
+          Crawls::Robots::Connpass.execute if id == '4'
         rescue => e
           message = e.message
         end
